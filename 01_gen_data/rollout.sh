@@ -98,6 +98,10 @@ get_count_generate_data()
 	echo "OS type is $OSTYPE. Arch is $get_arch"
 	for i in $(cat $PWD/../segment_hosts.txt); do
 		next_count=$(ssh -o ConnectTimeout=0 -n -f $i "bash -c 'ps -ef | grep generate_data.sh | grep -v grep | wc -l'" 2>&1 || true)
+                systeminfo=$(cat /etc/system-release)
+		if [[ "$systeminfo" == "Kylin Linux Advanced Server release V10 (Sword)" ]];then
+		        next_count=$(echo $next_count | grep -o '[0-9]*$')
+		fi
 		if [[ "$OSTYPE" == "darwin"* ]]; then
 		  check="[0-9]+$"
 		else
